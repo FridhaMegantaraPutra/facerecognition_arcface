@@ -2,6 +2,13 @@
 
 Aplikasi web untuk pendaftaran dan pengenalan wajah menggunakan teknologi deep learning dengan model ArcFace.
 
+## 🎥 Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/QwmApFc_Cho/0.jpg)](https://youtu.be/QwmApFc_Cho)
+
+Klik gambar di atas untuk menonton video demonstrasi Face Recognition ArcFace di YouTube.
+
+
 ## Deskripsi
 
 Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database dan melakukan pengenalan wajah dari gambar yang diunggah. Aplikasi menggunakan Flask sebagai backend, PostgreSQL untuk penyimpanan data, dan model ArcFace ONNX untuk ekstraksi fitur wajah.
