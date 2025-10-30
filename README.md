@@ -402,17 +402,4 @@ Embedding disimpan sebagai binary data menggunakan pickle serialization di kolom
 - Download model ArcFace ONNX
 - Letakkan file dengan nama `arc.onnx` di root atau folder `models/`
 
-## Kontribusi
 
-Silakan buat pull request atau laporkan issue jika menemukan bug atau ingin menambahkan fitur baru.
-
-## Lisensi
-
-Proyek ini dibuat untuk keperluan edukasi dan pembelajaran.
-
-## Catatan Penting
-
-- Model ArcFace tidak disertakan dalam repository. Unduh secara terpisah.
-- Gunakan foto dengan kualitas baik untuk hasil optimal.
-- Threshold similarity dapat disesuaikan di `face_utils.py` sesuai kebutuhan.
-- Untuk production, pertimbangkan untuk menggunakan model yang lebih besar atau ensemble model.
