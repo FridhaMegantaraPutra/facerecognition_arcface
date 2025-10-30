@@ -55,7 +55,11 @@ Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database
 │  - Nama (string)            │
 │  - Embedding (binary)       │
 └─────────────────────────────┘
+
 ```
+### visualisasi lewat gambar messi
+![UI Screenshot](messi.png)
+
 
 ### Diagram Alur Pengenalan Wajah
 
