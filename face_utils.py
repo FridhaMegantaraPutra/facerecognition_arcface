@@ -18,7 +18,7 @@ class FaceRecognition:
         # Pastikan direktori models ada
         os.makedirs('models', exist_ok=True)
         
-        # Jika file model tidak ada di direktori models, coba cari di root
+    
         if not os.path.exists(model_path) and os.path.exists('arc.onnx'):
             # Salin file model dari root ke direktori models
             os.system('cp arc.onnx models/')
