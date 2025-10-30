@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16
+    container_name: face_recognition
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 150802
+      POSTGRES_DB: face_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - face_db_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: face_flask
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://postgres:150802@db:5432/face_db
+    command: >
+      bash -c "
+      echo ' Menunggu PostgreSQL siap...';
+      sleep 5;
+      python init_db.py;
+      echo 'Menjalankan aplikasi Flask...';
+      gunicorn --bind 0.0.0.0:5000 app:app
+      "
+    volumes:
+      - .:/app
+
+volumes:
+  face_db_data:

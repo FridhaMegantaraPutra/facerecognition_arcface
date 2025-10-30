@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pengenalan Wajah</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+        
+        .preview-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        #preview, #recognizePreview {
+            width: 100%;
+            border-radius: 5px;
+        }
+        
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Sistem Pengenalan Wajah</h1>
+        
+        <div class="alert-container" id="alertContainer"></div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Pendaftaran Wajah</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="registerForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nama</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Unggah Gambar Wajah</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="preview-container">
+                                    <img id="preview" class="d-none">
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary" id="registerButton">Daftar</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Pengenalan Wajah</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="recognizeForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="recognizeImage" class="form-label">Unggah Gambar Wajah</label>
+                                <input type="file" class="form-control" id="recognizeImage" name="image" accept="image/*" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="preview-container">
+                                    <img id="recognizePreview" class="d-none">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3" id="recognizeResult">
+                                <!-- Hasil pengenalan wajah akan ditampilkan disini -->
+                            </div>
+                            
+                            <button type="button" class="btn btn-success" id="recognizeButton">Kenali</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Daftar Wajah</h5>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="refreshFacesButton">
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nama</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="facesList">
+                                    <!-- Daftar wajah akan ditampilkan disini -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal untuk menampilkan proses pengenalan wajah -->
+        <div class="modal fade" id="processModal" tabindex="-1" aria-labelledby="processModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="processModalLabel">Proses Pengenalan Wajah</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">Gambar Asli</div>
+                                    <div class="card-body p-0">
+                                        <img id="originalImage" class="img-fluid w-100">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">Deteksi Wajah</div>
+                                    <div class="card-body p-0">
+                                        <img id="detectionImage" class="img-fluid w-100">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">Wajah yang Dipotong</div>
+                                    <div class="card-body p-0">
+                                        <img id="croppedImage" class="img-fluid w-100">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">Wajah yang Diproses (Input Model)</div>
+                                    <div class="card-body p-0">
+                                        <img id="preprocessedImage" class="img-fluid w-100">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h5>Embedding Vector Preview (10 nilai pertama):</h5>
+                            <pre id="embeddingPreview" class="bg-light p-2 rounded"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap & script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fungsi untuk menampilkan alert
+            function showAlert(message, type = 'success') {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+                alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                const container = document.getElementById('alertContainer');
+                container.appendChild(alertDiv);
+                
+                setTimeout(() => {
+                    alertDiv.classList.remove('show');
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 150);
+                }, 5000);
+            }
+            
+            // Fungsi untuk menampilkan proses pengenalan wajah
+            function showProcess(processImages, embeddingPreview) {
+                // Set gambar proses
+                document.getElementById('originalImage').src = 'data:image/jpeg;base64,' + processImages.original;
+                document.getElementById('detectionImage').src = 'data:image/jpeg;base64,' + processImages.detection;
+                document.getElementById('croppedImage').src = 'data:image/jpeg;base64,' + processImages.cropped;
+                document.getElementById('preprocessedImage').src = 'data:image/jpeg;base64,' + processImages.preprocessed;
+                
+                // Set embedding preview
+                document.getElementById('embeddingPreview').textContent = '[' + embeddingPreview.join(', ') + '...]';
+                
+                // Tampilkan modal
+                const processModal = new bootstrap.Modal(document.getElementById('processModal'));
+                processModal.show();
+            }
+            
+            // Fungsi untuk memuat daftar wajah
+            function loadFaces() {
+                fetch('/api/face')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            const facesList = document.getElementById('facesList');
+                            facesList.innerHTML = '';
+                            
+                            if (data.data.length === 0) {
+                                facesList.innerHTML = '<tr><td colspan="3" class="text-center">Tidak ada wajah terdaftar</td></tr>';
+                                return;
+                            }
+                            
+                            data.data.forEach(face => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${face.id}</td>
+                                    <td>${face.name}<br><small class="text-muted">Embedding: [${face.embedding_preview.join(', ')}...]</small></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger delete-face" data-id="${face.id}">Hapus</button>
+                                    </td>
+                                `;
+                                facesList.appendChild(row);
+                            });
+                            
+                            // Event listener untuk tombol hapus
+                            document.querySelectorAll('.delete-face').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const id = this.getAttribute('data-id');
+                                    deleteFace(id);
+                                });
+                            });
+                        } else {
+                            showAlert('Gagal memuat daftar wajah: ' + data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        showAlert('Gagal memuat daftar wajah: ' + error.message, 'danger');
+                    });
+            }
+            
+            // Fungsi untuk menghapus wajah
+            function deleteFace(id) {
+                if (!confirm('Apakah Anda yakin ingin menghapus wajah ini?')) {
+                    return;
+                }
+                
+                fetch(`/api/face/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            showAlert('Wajah berhasil dihapus');
+                            loadFaces();
+                        } else {
+                            showAlert('Gagal menghapus wajah: ' + data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        showAlert('Gagal menghapus wajah: ' + error.message, 'danger');
+                    });
+            }
+            
+            // Fungsi untuk menampilkan preview gambar
+            function showPreview(input, previewId) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById(previewId);
+                        preview.src = e.target.result;
+                        preview.classList.remove('d-none');
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            
+            // Event handler untuk preview gambar
+            document.getElementById('image').addEventListener('change', function() {
+                showPreview(this, 'preview');
+            });
+            
+            document.getElementById('recognizeImage').addEventListener('change', function() {
+                showPreview(this, 'recognizePreview');
+            });
+            
+            // Event handler untuk pendaftaran wajah
+            document.getElementById('registerButton').addEventListener('click', function() {
+                const form = document.getElementById('registerForm');
+                const formData = new FormData(form);
+                
+                if (!form.checkValidity()) {
+                    showAlert('Silakan isi semua field yang diperlukan', 'warning');
+                    return;
+                }
+                
+                fetch('/api/face/register', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            showAlert('Wajah berhasil didaftarkan');
+                            form.reset();
+                            document.getElementById('preview').classList.add('d-none');
+                            loadFaces();
+                            
+                            // Tampilkan proses pengenalan wajah
+                            if (data.data.process_images) {
+                                showProcess(data.data.process_images, data.data.embedding_preview);
+                            }
+                        } else {
+                            showAlert('Gagal mendaftarkan wajah: ' + data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        showAlert('Gagal mendaftarkan wajah: ' + error.message, 'danger');
+                    });
+            });
+            
+            // Event handler untuk pengenalan wajah
+            document.getElementById('recognizeButton').addEventListener('click', function() {
+                const form = document.getElementById('recognizeForm');
+                const formData = new FormData(form);
+                
+                if (!form.checkValidity()) {
+                    showAlert('Silakan pilih gambar terlebih dahulu', 'warning');
+                    return;
+                }
+                
+                document.getElementById('recognizeResult').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+                
+                fetch('/api/face/recognize', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            let resultHtml = '';
+                            
+                            if (data.data && data.data.name) {
+                                resultHtml = `
+                                    <div class="alert alert-success">
+                                        <h5>Wajah Dikenali!</h5>
+                                        <p>Nama: <strong>${data.data.name}</strong></p>
+                                        <p>Keyakinan: <strong>${(data.data.confidence * 100).toFixed(2)}%</strong></p>
+                                    </div>
+                                `;
+                            } else {
+                                resultHtml = `
+                                    <div class="alert alert-warning">
+                                        <h5>Wajah Tidak Dikenali</h5>
+                                        <p>Wajah ini tidak ditemukan dalam database.</p>
+                                    </div>
+                                `;
+                            }
+                            
+                            document.getElementById('recognizeResult').innerHTML = resultHtml;
+                            
+                            // Tampilkan proses pengenalan wajah
+                            if (data.data && data.data.process_images) {
+                                showProcess(data.data.process_images, data.data.embedding_preview);
+                            }
+                        } else {
+                            document.getElementById('recognizeResult').innerHTML = `
+                                <div class="alert alert-danger">
+                                    <h5>Error</h5>
+                                    <p>${data.message}</p>
+                                </div>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById('recognizeResult').innerHTML = `
+                            <div class="alert alert-danger">
+                                <h5>Error</h5>
+                                <p>${error.message}</p>
+                            </div>
+                        `;
+                    });
+            });
+            
+            // Event handler untuk refresh daftar wajah
+            document.getElementById('refreshFacesButton').addEventListener('click', loadFaces);
+            
+            // Muat daftar wajah saat halaman dimuat
+            loadFaces();
+        });
+    </script>
+</body>
+</html>
