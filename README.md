@@ -1,6 +1,16 @@
 # Sistem Pengenalan Wajah
 
 Aplikasi web untuk pendaftaran dan pengenalan wajah menggunakan teknologi deep learning dengan model ArcFace.
+## 🧠 Model Download
+
+<p align="center">
+  <a href="https://huggingface.co/garavv/arcface-onnx" target="_blank">
+    <img src="https://img.shields.io/badge/Download%20Model-ArcFace%20ONNX-blue?style=for-the-badge&logo=huggingface" alt="Download ArcFace ONNX">
+  </a>
+</p>
+
+Model ini digunakan untuk melakukan ekstraksi fitur wajah (face embedding) yang nantinya dibandingkan menggunakan cosine similarity untuk proses face recognition.
+
 
 ## 🎥 Demo Video
 
