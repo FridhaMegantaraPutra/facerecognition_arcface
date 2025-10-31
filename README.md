@@ -133,7 +133,7 @@ face-recognitin/
 
 3. Pastikan file `.env` sudah dikonfigurasi dengan benar:
 ```env
-DATABASE_URL='postgresql://postgres:150802@localhost:5432/face_db'
+DATABASE_URL='postgresql://postgres:150802@db:5432/face_db'
 ```
 
 4. Jalankan dengan Docker Compose:
