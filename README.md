@@ -83,15 +83,16 @@ Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database
 
 ```mermaid
 flowchart TD
-    A["Upload Gambar\nuntuk Diuji"] --> B["Deteksi Wajah (OpenCV)\n- Haarcascade Classifier"]
-    B --> C["Preprocessing\n- Crop wajah\n- Resize 112x112\n- Convert RGB\n- Normalisasi"]
-    C --> D["Ekstraksi Fitur (ArcFace)\n- Output: Embedding 512-D\n- Normalisasi L2"]
-    D --> E["Ambil Semua Embedding\n dari Database"]
-    E --> F["Hitung Cosine Similarity\n dengan Setiap Embedding\n di Database"]
-    F --> G["Cek Threshold\n- Similarity > 0.2 ?"]
+    A["Upload Gambar\\nuntuk Diuji"] --> B["Deteksi Wajah (OpenCV)\\n- Haarcascade Classifier"]
+    B --> C["Preprocessing\\n- Crop wajah\\n- Resize 112x112\\n- Convert RGB\\n- Normalisasi"]
+    C --> D["Ekstraksi Fitur (ArcFace)\\n- Output: Embedding 512-D\\n- Normalisasi L2"]
+    D --> E["Ambil Semua Embedding\\ndari Database"]
+    E --> F["Hitung Cosine Similarity\\ndengan Setiap Embedding\\ndi Database"]
+    F --> G["Cek Threshold\\n- Similarity > 0.2 ?"]
     
-    G -->|Ya| H["Wajah Dikenali\nReturn: Nama + Confidence"]
+    G -->|Ya| H["Wajah Dikenali\\nReturn: Nama + Confidence"]
     G -->|Tidak| I["Wajah Tidak Dikenali"]
+
 
 ```
 
