@@ -80,70 +80,18 @@ Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database
 
 ### Diagram Alur Pengenalan Wajah
 
-```
-┌─────────────────┐
-│  Upload Gambar  │
-│   untuk Diuji   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Deteksi Wajah (OpenCV)     │
-│  - Haarcascade Classifier   │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Preprocessing              │
-│  - Crop wajah               │
-│  - Resize 112x112           │
-│  - Convert RGB              │
-│  - Normalisasi              │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Ekstraksi Fitur (ArcFace)  │
-│  - Output: Embedding 512-D  │
-│  - Normalisasi L2           │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Ambil Semua Embedding      │
-│  dari Database              │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Hitung Cosine Similarity   │
-│  dengan Setiap Embedding    │
-│  di Database                │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Cek Threshold              │
-│  - Similarity > 0.2 ?       │
-└────────┬────────────────────┘
-         │
-         ├─── Ya ──────────────────────┐
-         │                             │
-         │                             ▼
-         │                    ┌─────────────────┐
-         │                    │  Wajah Dikenali │
-         │                    │  Return: Nama + │
-         │                    │  Confidence     │
-         │                    └─────────────────┘
-         │
-         └─── Tidak ──────────────────┐
-                                      │
-                                      ▼
-                             ┌──────────────────┐
-                             │  Wajah Tidak     │
-                             │  Dikenali        │
-                             └──────────────────┘
-```
+```mermaid
+flowchart TD
+    A[Upload Gambar<br>untuk Diuji] --> B[Deteksi Wajah (OpenCV)<br>- Haarcascade Classifier]
+    B --> C[Preprocessing<br>- Crop wajah<br>- Resize 112x112<br>- Convert RGB<br>- Normalisasi]
+    C --> D[Ekstraksi Fitur (ArcFace)<br>- Output: Embedding 512-D<br>- Normalisasi L2]
+    D --> E[Ambil Semua Embedding<br>dari Database]
+    E --> F[Hitung Cosine Similarity<br>dengan Setiap Embedding<br>di Database]
+    F --> G[Cek Threshold<br>- Similarity > 0.2 ?]
+    
+    G -->|Ya| H[Wajah Dikenali<br>Return: Nama + Confidence]
+    G -->|Tidak| I[Wajah Tidak Dikenali]
+
 
 ## Teknologi yang Digunakan
 
@@ -170,7 +118,7 @@ Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database
 ## Struktur Proyek
 
 ```
-face-recognition/
+face-recognitin/
 │
 ├── app.py                  # Entry point aplikasi Flask
 ├── database.py             # Model database dan konfigurasi
