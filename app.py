@@ -18,7 +18,9 @@ import os
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
     'DATABASE_URL', 
-    'postgresql://postgres:150802@localhost:5432/face_db'
+    'postgresql://postgres:150802@db:5432/face_db'
+    
+    
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Maksimal 16MB untuk upload
