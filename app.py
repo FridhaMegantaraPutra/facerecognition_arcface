@@ -3,10 +3,8 @@ import os
 from database import init_db, Face, db
 from face_utils import FaceRecognition
 
-# Buat direktori templates jika belum ada
 os.makedirs('templates', exist_ok=True)
 
-# Jika index.html ada di root tapi tidak di templates, salin ke templates
 if not os.path.exists('templates/index.html') and os.path.exists('index.html'):
     os.system('cp index.html templates/')
 
@@ -211,7 +209,7 @@ def delete_face(face_id):
         }), 500
 
 if __name__ == '__main__':
-    # Buat tabel jika belum ada (tanpa menghapus data yang sudah ada)
+  
     with app.app_context():
         
         db.create_all()
