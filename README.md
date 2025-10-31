@@ -79,6 +79,8 @@ Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database
 
 
 ### Diagram Alur Pengenalan Wajah
+
+
 ```mermaid
 flowchart TD
     A["Upload Gambar\nuntuk Diuji"] --> B["Deteksi Wajah (OpenCV)\n- Haarcascade Classifier"]
@@ -91,6 +93,7 @@ flowchart TD
     G -->|Ya| H["Wajah Dikenali\nReturn: Nama + Confidence"]
     G -->|Tidak| I["Wajah Tidak Dikenali"]
 
+```
 
 
 
