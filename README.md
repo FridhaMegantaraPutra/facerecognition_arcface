@@ -75,7 +75,7 @@ Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database
 
 ```
 ### visualisasi lewat gambar messi
-![meesi digaram](tessi.png)
+![messi digaram](goat_messi.png)
 
 
 ### Diagram Alur Pengenalan Wajah
