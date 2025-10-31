@@ -36,42 +36,13 @@ Sistem ini memungkinkan pengguna untuk mendaftarkan wajah baru ke dalam database
 
 ### Diagram Alur Penyimpanan Wajah
 
-```
-┌─────────────────┐
-│  Upload Gambar  │
-│   + Nama User   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Deteksi Wajah (OpenCV)     │
-│  - Haarcascade Classifier   │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Preprocessing              │
-│  - Crop wajah (x,y,w,h)     │
-│  - Resize 112x112           │
-│  - Convert RGB              │
-│  - Normalisasi (0-1)        │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Ekstraksi Fitur (ArcFace)  │
-│  - Input: 112x112x3         │
-│  - Output: Embedding 512-D  │
-│  - Normalisasi L2           │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Simpan ke Database         │
-│  - ID (auto increment)      │
-│  - Nama (string)            │
-│  - Embedding (binary)       │
-└─────────────────────────────┘
+```mermaid
+flowchart TD
+    A["Upload Gambar + Nama User"] --> B["Deteksi Wajah (OpenCV) - Haarcascade Classifier"]
+    B --> C["Preprocessing: Crop wajah (x,y,w,h), Resize 112x112, Convert RGB, Normalisasi (0-1)"]
+    C --> D["Ekstraksi Fitur (ArcFace): Input 112x112x3, Output Embedding 512-D, Normalisasi L2"]
+    D --> E["Simpan ke Database: ID (auto increment), Nama (string), Embedding (binary)"]
+
 
 ```
 ### visualisasi lewat gambar messi
